@@ -17,7 +17,6 @@ def wait_for_page_to_load(driver, timeout=4):
 
 def count_datasets(driver, host):
 
-    
     driver.get(f"{host}/dataset/list")
     wait_for_page_to_load(driver)
 
@@ -134,6 +133,7 @@ def test_upload_dataset():
         # Close the browser
         close_driver(driver)
 
+
 def test_download_button():
     driver = initialize_driver()
 
@@ -143,7 +143,11 @@ def test_download_button():
         # Open the dataset page
         driver.get(f"{host}{SAMPLE_DATASET_ROUTE}")
         wait_for_page_to_load(driver)
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//a[contains(., 'Download All')]")))
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located(
+                (By.XPATH, "//a[contains(., 'Download All')]")
+            )
+        )
         # Check presence of buttons
         assert driver.find_element(By.XPATH, "//a[contains(., 'Download All')]")
 
@@ -151,7 +155,6 @@ def test_download_button():
 
     finally:
         close_driver(driver)
-
 
 
 # Call the test function
