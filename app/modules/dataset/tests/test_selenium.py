@@ -16,6 +16,8 @@ def wait_for_page_to_load(driver, timeout=4):
 
 
 def count_datasets(driver, host):
+
+    
     driver.get(f"{host}/dataset/list")
     wait_for_page_to_load(driver)
 
