@@ -27,12 +27,12 @@ jobs:
           # flake8 . --exit-zero || true
 
       - name: Commit and push changes
-        if: success() && steps.lint-and-fix.outcome == 'success'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "Auto-fix lint errors [bot]"
+          git commit -m "Auto-fix lint errors [bot]" || echo "No changes to commit"
           git push origin develop
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
