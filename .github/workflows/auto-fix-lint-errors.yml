@@ -1,0 +1,44 @@
+name: Auto Fix Lint Errors
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-fix:
+    name: Lint and Auto-fix Errors
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js (if using ESLint or similar)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm ci || npm install
+          # O si usas Python:
+          # python -m pip install --upgrade pip
+          # pip install -r requirements.txt
+
+      - name: Run linter and auto-fix
+        run: |
+          npm run lint -- --fix || true
+          # O si usas Python con flake8:
+          # flake8 . --exit-zero || true
+
+      - name: Commit and push changes
+        if: success() && steps.lint-and-fix.outcome == 'success'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Auto-fix lint errors [bot]"
+          git push origin develop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
