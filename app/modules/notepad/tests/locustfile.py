@@ -1,15 +1,16 @@
-from locust import HttpUser, task, between
 import random
+
+from locust import HttpUser, between, task
+
 
 class NotepadUser(HttpUser):
     wait_time = between(1, 5)
 
     def on_start(self):
         # Login at the start of each simulated user session
-        self.client.post("/login", data={
-            "email": "user@example.com",
-            "password": "test1234"
-        })
+        self.client.post(
+            "/login", data={"email": "user@example.com", "password": "test1234"}
+        )
 
     @task(3)
     def view_notepads(self):
@@ -24,9 +25,11 @@ class NotepadUser(HttpUser):
     def create_notepad(self):
         new_notepad = {
             "title": f"Notepad created by Locust {random.randint(1, 1000)}",
-            "body": "This is a test notepad created during load testing."
+            "body": "This is a test notepad created during load testing.",
         }
-        with self.client.post("/notepad/create", data=new_notepad, catch_response=True) as response:
+        with self.client.post(
+            "/notepad/create", data=new_notepad, catch_response=True
+        ) as response:
             if response.status_code == 200:
                 print("Notepad created successfully.")
             else:

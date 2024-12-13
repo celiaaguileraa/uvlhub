@@ -1,8 +1,11 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from app.modules.notepad.services import NotepadService
-from app.modules.notepad.models import Notepad
+
 from app.modules.auth.models import User
+from app.modules.notepad.models import Notepad
+from app.modules.notepad.services import NotepadService
+
 
 @pytest.fixture(scope="module")
 def test_client(test_client):
@@ -15,12 +18,14 @@ def test_client(test_client):
         pass
     yield test_client
 
+
 @pytest.fixture
 def notepad_service():
     return NotepadService()
 
+
 def test_get_all_by_user(notepad_service):
-    with patch.object(notepad_service.repository, 'get_all_by_user') as mock_get_all:
+    with patch.object(notepad_service.repository, "get_all_by_user") as mock_get_all:
         mock_notepads = [MagicMock(id=1), MagicMock(id=2)]
         mock_get_all.return_value = mock_notepads
 
@@ -31,13 +36,14 @@ def test_get_all_by_user(notepad_service):
         assert len(result) == 2
         mock_get_all.assert_called_once_with(user_id)
 
+
 def test_create(notepad_service):
-    with patch.object(notepad_service.repository, 'create') as mock_create:
+    with patch.object(notepad_service.repository, "create") as mock_create:
         mock_notepad = MagicMock(id=1)
         mock_create.return_value = mock_notepad
 
-        title = 'Test Notepad'
-        body = 'Test Body'
+        title = "Test Notepad"
+        body = "Test Body"
         user_id = 1
 
         result = notepad_service.create(title=title, body=body, user_id=user_id)
@@ -46,22 +52,24 @@ def test_create(notepad_service):
         assert result.id == 1
         mock_create.assert_called_once_with(title=title, body=body, user_id=user_id)
 
+
 def test_update(notepad_service):
-    with patch.object(notepad_service.repository, 'update') as mock_update:
+    with patch.object(notepad_service.repository, "update") as mock_update:
         mock_notepad = MagicMock(id=1)
         mock_update.return_value = mock_notepad
 
         notepad_id = 1
-        title = 'Updated Notepad'
-        body = 'Updated Body'
+        title = "Updated Notepad"
+        body = "Updated Body"
 
         result = notepad_service.update(notepad_id, title=title, body=body)
 
         assert result == mock_notepad
         mock_update.assert_called_once_with(notepad_id, title=title, body=body)
 
+
 def test_delete(notepad_service):
-    with patch.object(notepad_service.repository, 'delete') as mock_delete:
+    with patch.object(notepad_service.repository, "delete") as mock_delete:
         mock_delete.return_value = True
 
         notepad_id = 1
