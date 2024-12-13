@@ -130,6 +130,26 @@ def test_upload_dataset():
         # Close the browser
         close_driver(driver)
 
+def test_download_button():
+    driver = initialize_driver()
+
+    try:
+        host = get_host_for_selenium_testing()
+
+        # Open the dataset page
+        driver.get(f"{host}{SAMPLE_DATASET_ROUTE}")
+        wait_for_page_to_load(driver)
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//a[contains(., 'Download All')]")))
+        # Check presence of buttons
+        assert driver.find_element(By.XPATH, "//a[contains(., 'Download All')]")
+
+        print("The botton is present and correctly placed!")
+
+    finally:
+        close_driver(driver)
+
+
 
 # Call the test function
 test_upload_dataset()
+test_download_button()
