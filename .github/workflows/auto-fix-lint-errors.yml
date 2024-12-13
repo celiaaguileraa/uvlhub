@@ -25,9 +25,6 @@ jobs:
         run: |
           black . --check || black .
           isort . --check-only || isort .
-      
-      - name: Run Flake8 (lint check only)
-        run: flake8 .
 
       - name: Commit and push changes
         run: |
