@@ -36,11 +36,11 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "Auto-fix lint errors [bot]" || echo "No changes to commit"
-          git push origin HEAD:${{ github.head_ref }}
+          git push origin HEAD:refs/heads/${{ github.head_ref }}
            if [ "${{ github.event_name }}" == "push" ]; then
             git push origin main
           else
-            git push origin HEAD:${{ github.head_ref }}
+            git push origin HEAD:refs/heads/${{ github.head_ref }}
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
